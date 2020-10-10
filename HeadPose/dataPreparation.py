@@ -7,7 +7,9 @@ import cv2
 import re
 from os import listdir
 from os.path import isfile, join
+import sys
 import face_recognition
+from PIL import Image
 
 
 def atoi(text):
@@ -71,6 +73,30 @@ def getRGBPoseDatawithMTCNN(rgbFilePath, ad, fileName):
     else:
         print(fileName, '[]')
         return False, (None, None, None, None)
+
+
+def getRGBPoseDatawithFR(rgbFilePath, poseFilePath):
+    rgbData = cv2.imread(rgbFilePath)
+    rgb = cv2.cvtColor(rgbData, cv2.COLOR_BGR2RGB)
+
+    # with open(poseFilePath, 'r') as f:
+    #     pose = np.asarray(f.readline().strip().split(','), dtype='float32')
+    pose = None
+
+    try:
+        boxes = face_recognition.face_locations(rgb, model='cnn')  # (top, right, bottom, left)
+        crop = rgb[boxes[0][0] - 100:boxes[0][2] + 100, boxes[0][3] - 100:boxes[0][1] + 100]
+        dim = (400, 400)
+        resized = cv2.resize(crop, dim, interpolation=cv2.INTER_AREA)
+        return resized, pose
+
+    except:
+        print('Face not detected in : ' + rgbFilePath)
+        crop = rgb[30:450, 110:530]  # rgb[:, 80:560]
+        dim = (400, 400)
+        resized = cv2.resize(crop, dim, interpolation=cv2.INTER_AREA)
+
+        return resized, pose
 
 
 # ---- Male List ---- #  2
@@ -284,9 +310,9 @@ if False:
         # plt.show()
         cv2.imwrite(os.path.join(r'C:\Users\sbasak\Desktop\test', name), img)
 
-# Create the text file with RGB and pose txt
+# Create the text data file with RGB and pose txt
 if True:
-    dataPath = r'D:\project1\dataCreation\Others\FRTesting\HeadRotFR'
+    dataPath = r'D:\project1\dataCreation\Data\HeadPose\FRTesting\HeadRotFR'
     with open(os.path.join(dataPath, 'data.txt'), 'a') as f1:
         for gender in ['male', 'female']:  # 'female'
             for id in next(os.walk(os.path.join(dataPath, gender)))[1]:
@@ -312,3 +338,187 @@ if True:
 
                     else:
                         print('issue in : ', idPath)
+
+# Prepare BIWI data with the same method
+# Does not worked
+if False:
+
+    from mtcnn.mtcnn import MTCNN
+    detector = MTCNN()
+
+    dataPath = r'D:\project1\dataCreation\Data\HeadPose\Biwi\Orig'
+    dataPathNew = r'D:\project1\dataCreation\Data\HeadPose\Biwi\FR'
+
+    for id in next(os.walk(dataPath))[1]:
+
+        idPath = os.path.join(dataPath, id)
+        idPathNew = os.path.join(dataPathNew, id)
+
+        if not os.path.exists(idPathNew):
+            os.makedirs(idPathNew, exist_ok=True)
+
+        onlyfiles_txt_temp = [f for f in listdir(idPath) if
+                              isfile(join(idPath, f)) and join(idPath, f).endswith('.txt')]
+        onlyfiles_jpg_temp = [f for f in listdir(idPath) if
+                              isfile(join(idPath, f)) and join(idPath, f).endswith('.png')]
+
+        onlyfiles_txt_temp.sort(key=natural_keys)
+        onlyfiles_jpg_temp.sort(key=natural_keys)
+
+        if len(onlyfiles_txt_temp) == len(onlyfiles_jpg_temp):
+
+            (xw1p, xw2p, yw1p, yw2p) = (120, 520, 80, 480)
+            yP, pP, rP = 0, 0, 0
+
+            for f1, f2 in zip(onlyfiles_txt_temp, onlyfiles_jpg_temp):
+
+                # --------------- pose data preparation -----------------
+                img_name_split = f2.split('_')
+                txt_name_split = f1.split('_')
+
+                if img_name_split[1] != txt_name_split[1]:
+                    print('Mismatched!')
+                    sys.exit()
+
+                # print(f2, f1)
+
+                posePath = os.path.join(idPath, f1)
+                posePathNew = os.path.join(idPathNew, 'pose'+txt_name_split[1]+'.txt')
+                # Load pose in degrees
+                pose_annot = open(posePath, 'r')
+                R = []
+                for line in pose_annot:
+                    line = line.strip('\n').split(' ')
+                    L = []
+                    if line[0] != '':
+                        for nb in line:
+                            if nb == '':
+                                continue
+                            L.append(float(nb))
+                        R.append(L)
+
+                R = np.array(R)
+                T = R[3, :]
+                R = R[:3, :]
+                pose_annot.close()
+
+                R = np.transpose(R)
+
+                roll = -np.arctan2(R[1][0], R[0][0]) * 180 / np.pi
+                yaw = -np.arctan2(-R[2][0], np.sqrt(R[2][1] ** 2 + R[2][2] ** 2)) * 180 / np.pi
+                pitch = np.arctan2(R[2][1], R[2][2]) * 180 / np.pi
+
+                cont_labels = np.array([[yaw, pitch, roll]])
+
+                with open(posePathNew, 'ab') as f:
+                    np.savetxt(f, cont_labels, fmt='%.5f', delimiter=',')
+
+                # ------------------------------------------------------------
+
+                # ------------------- rgb file preparation -------------------
+
+                rgbPath = os.path.join(idPath, f2)
+                rgbPathNew = os.path.join(idPathNew, 'rgb' + img_name_split[1] + '.jpg')
+
+                y, p, r = yaw, pitch, roll
+
+                deltaY, deltaP, deltaR = y - yP, p - pP, r - rP
+                print(f'{deltaY:.2f},{deltaP:.2f},{deltaR:.2f}')
+
+                img, (xw1, xw2, yw1, yw2) = getRGBPoseDatawithMTCNN(rgbPath, 0.5, f2)
+
+                if img is not False:
+                    if img.shape[0] != img.shape[1]:
+                        # print('Shape Issue : ', rgb)
+                        img = cv2.imread(rgbPath)
+                        img = img[yw1p:yw2p, xw1p:xw2p, :]
+                        img = cv2.resize(img, (400, 400), interpolation=cv2.INTER_AREA)
+                        cv2.imwrite(rgbPathNew, img)
+
+
+                    else:
+                        img = cv2.resize(img, (400, 400), interpolation=cv2.INTER_AREA)
+                        cv2.imwrite(rgbPathNew, img)
+                        (xw1p, xw2p, yw1p, yw2p) = (xw1, xw2, yw1, yw2)
+                else:
+                    # print('Face not detected : ', rgb)
+                    img = cv2.imread(rgbPath)
+                    if abs(deltaY) > 9:
+                        img = img[80:480, 120:520, :]
+                        (xw1p, xw2p, yw1p, yw2p) = (120, 520, 80, 480)
+                    else:
+                        img = img[yw1p:yw2p, xw1p:xw2p, :]
+                    img = cv2.resize(img, (400, 400), interpolation=cv2.INTER_AREA)
+                    cv2.imwrite(rgbPathNew, img)
+
+                yP, pP, rP = y, p, r
+
+
+# ----- Create the npy file for head pose and rgb
+if False:
+    dataPath = r'D:\project1\dataCreation\Data\HeadPose\FRTesting\HeadRot'
+    dataPathNew = r'D:\project1\dataCreation\Data\HeadPose\FRTesting\HeadRotFR'
+
+    for gender in ['male', 'female']:  # 'female'
+        for id in next(os.walk(os.path.join(dataPath, gender)))[1]:
+            if True: # id == '0004':
+                idPath = os.path.join(dataPath, gender, id, 'HeadPose', 'Textured', 'Neutral')
+                idPathNew = os.path.join(dataPathNew, gender, id, 'HeadPose', 'Textured', 'Neutral')
+
+                print(idPath)
+
+                if not os.path.exists(idPathNew):
+                    os.makedirs(idPathNew, exist_ok=True)
+
+                onlyfiles_txt_temp = [f for f in listdir(idPath) if
+                                      isfile(join(idPath, f)) and join(idPath, f).endswith('.txt')]
+                onlyfiles_jpg_temp = [f for f in listdir(idPath) if
+                                      isfile(join(idPath, f)) and join(idPath, f).endswith('.jpg')]
+
+                onlyfiles_txt_temp.sort(key=natural_keys)
+                onlyfiles_jpg_temp.sort(key=natural_keys)
+
+                if len(onlyfiles_txt_temp) == len(onlyfiles_jpg_temp):
+
+                    for f1, f2 in zip(onlyfiles_txt_temp, onlyfiles_jpg_temp):
+
+                        rgbPath = os.path.join(idPath, f2)
+                        if len(f2) > 11:
+                            _f2 = f2[:-8] + '.jpg'
+                        else:
+                            _f2 = f2
+                        rgbPathNew = os.path.join(idPathNew, _f2)
+
+                        txtPath = os.path.join(idPath, f1)
+                        if 'data' in f1:
+                            _f1 = f1.replace('data_', 'pose')
+                        else:
+                            _f1 = f1
+                        txtPathNew = os.path.join(idPathNew, _f1)
+
+                        rgb, pose = getRGBPoseDatawithFR(rgbPath, txtPath)
+                        if rgb is not False:
+                            img = Image.fromarray(rgb)
+                            img.save(rgbPathNew)
+
+                            # rgbDataList.append(rgb)
+                            # poseDataList.append(pose)
+
+                            shutil.copy2(txtPath, txtPathNew)
+
+if False:
+# Count file number in each folder and print
+    dataPathNew = r'D:\project1\dataCreation\Data\HeadPose\FRTesting\HeadRotFR'
+
+    for gender in ['male', 'female']:  # 'female'
+        for id in next(os.walk(os.path.join(dataPathNew, gender)))[1]:
+            if True: # id == '0004':
+                idPath = os.path.join(dataPathNew, gender, id, 'HeadPose', 'Textured', 'Neutral')
+                print(idPath)
+
+                onlyfiles_txt_temp = [f for f in listdir(idPath) if
+                                      isfile(join(idPath, f)) and join(idPath, f).endswith('.txt')]
+                onlyfiles_jpg_temp = [f for f in listdir(idPath) if
+                                      isfile(join(idPath, f)) and join(idPath, f).endswith('.jpg')]
+
+                print(len(onlyfiles_jpg_temp), len(onlyfiles_txt_temp))
