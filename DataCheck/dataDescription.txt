@@ -1,0 +1,11 @@
+Head pose -
+
+Camera Location: (-0.0001, -0.3122, 1.5968)
+Head Point Location: (-0.0154, -0.0116, 1.5964)
+Camera Rotation: Yaw 0.00 Pitch 90.00 Roll -0.00
+Head Rotation: Yaw -8.34 Pitch -20.73 Roll 4.70
+
+8.34,20.73,-4.7
+
+**************************************
+

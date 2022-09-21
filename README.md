@@ -9,8 +9,35 @@
 * Data Preparation Script
 * Neck Bone Adjustment through Iterative Script
 
+## Install package within Blender Python
+
+* Open Blender python editor
+* Locate the blender python version 
+  
+  Normally in the <Blender_Root>/<Blender_Version>2.93/python/bin
+  
+  Run the following scripts from Blender python terminal - 
+
+```shell
+# directory - face3d/mesh/cython
+import sys 
+import os 
+import subprocess 
+  
+
+python_exe = os.path.join(sys.prefix, 'bin','python3.9')
+
+# Upgrade Pip
+subprocess.call([python_exe, "-m", "ensurepip"]) 
+subprocess.call([python_exe, "-m", "pip", "install", "--upgrade", "pip"]) 
+
+# Install sympy
+subprocess.call([python_exe, "-m", "pip", "install", "sympy"]) 
+
+```
+
 ## Dataset
-We have released the dartaset for the 3D models - 
+We have released the dataset for the 3D models - 
 
 https://ieee-dataport.org/documents/c3i-synthetic-human-dataset
 
