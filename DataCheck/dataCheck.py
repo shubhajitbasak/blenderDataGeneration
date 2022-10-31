@@ -1,7 +1,8 @@
 import os
 import glob
-import cv2
-import matplotlib.pyplot as plt
+import subprocess
+# import cv2
+# import matplotlib.pyplot as plt
 
 
 
@@ -30,70 +31,85 @@ import matplotlib.pyplot as plt
 
 # Depth data check -
 
-root = '/mnt/fastssd/synData/FaceDepthSynth'
 
-os.environ["OPENCV_IO_ENABLE_OPENEXR"]="1"
+os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
 
-for gender in next(os.walk(root))[1]:
-    for id in next(os.walk(os.path.join(root, gender)))[1]:
-        # idPath = os.path.join(root, gender, id)
-        for bckgnd in next(os.walk(os.path.join(root, gender, id)))[1]:
-            if bckgnd == 'Complex':
-                for scn in next(os.walk(os.path.join(root, gender, id, bckgnd)))[1]:
-                    for exp in next(os.walk(os.path.join(root, gender, id, bckgnd,scn)))[1]:
-                        for hdmvmt in next(os.walk(os.path.join(root, gender, id, bckgnd, scn, exp)))[1]:
 
-                            txtCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.txt')))
-                            exrCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.exr')))
-                            pngCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.png')))
-                            jpgCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.jpg')))
+def checkCount(root):
+    for gender in next(os.walk(root))[1]:
+        for id in next(os.walk(os.path.join(root, gender)))[1]:
+            # idPath = os.path.join(root, gender, id)
+            for bckgnd in next(os.walk(os.path.join(root, gender, id)))[1]:
+                if bckgnd == 'Complex':
+                    for scn in next(os.walk(os.path.join(root, gender, id, bckgnd)))[1]:
+                        for exp in next(os.walk(os.path.join(root, gender, id, bckgnd,scn)))[1]:
+                            for hdmvmt in next(os.walk(os.path.join(root, gender, id, bckgnd, scn, exp)))[1]:
 
-                            # pngs = glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.png'))
-                            # exrs = glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.exr'))
-                            #
-                            # pngs.sort()
-                            # exrs.sort()
-                            #
-                            # for p, e in zip(pngs, exrs):
-                            #     png = plt.imread(p)
-                            #     exr = cv2.imread(e,  cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH)
-                            #     exr_plt = exr/5.0
-                            #     print(png, exr)
+                                txtCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.txt')))
+                                exrCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.exr')))
+                                pngCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.png')))
+                                jpgCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.jpg')))
 
-                            # pngFiles = glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, 'depth*.png'))
+                                # pngs = glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.png'))
+                                # exrs = glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, '*.exr'))
+                                #
+                                # pngs.sort()
+                                # exrs.sort()
+                                #
+                                # for p, e in zip(pngs, exrs):
+                                #     png = plt.imread(p)
+                                #     exr = cv2.imread(e,  cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH)
+                                #     exr_plt = exr/5.0
+                                #     print(png, exr)
+
+                                # pngFiles = glob.glob(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt, 'depth*.png'))
+                                #
+                                # for f in pngFiles:
+                                #     os.remove(f)
+
+                                if not (txtCount == exrCount == jpgCount == pngCount):
+                                    # if txtCount== 2*jpgCount:
+                                    print(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt))
+                                    print(txtCount, exrCount, jpgCount, pngCount)
+
+                else:
+                    for exp in next(os.walk(os.path.join(root, gender, id, bckgnd)))[1]:
+                        for hdmvmt in next(os.walk(os.path.join(root, gender, id, bckgnd, exp)))[1]:
+
+                            txtCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, '*.txt')))
+                            exrCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, '*.exr')))
+                            pngCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, '*.png')))
+                            jpgCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, '*.jpg')))
+
+                            # pngFiles = glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, 'depth*.png'))
                             #
                             # for f in pngFiles:
                             #     os.remove(f)
 
                             if not (txtCount == exrCount == jpgCount == pngCount):
-                                # if txtCount== 2*jpgCount:
-                                print(os.path.join(root, gender, id, bckgnd, scn, exp, hdmvmt))
+                                # if txtCount == 2 * jpgCount:
+                                #     headposeFiles = glob.glob(os.path.join(root, gender, id, bckgnd,
+                                #                                            exp, hdmvmt, 'headpose*.txt'))
+                                #
+                                #     for f in headposeFiles:
+                                #         os.remove(f)
+
+                                print(os.path.join(root, gender, id, bckgnd, exp, hdmvmt))
                                 print(txtCount, exrCount, jpgCount, pngCount)
 
-            else:
-                for exp in next(os.walk(os.path.join(root, gender, id, bckgnd)))[1]:
-                    for hdmvmt in next(os.walk(os.path.join(root, gender, id, bckgnd, exp)))[1]:
 
-                        txtCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, '*.txt')))
-                        exrCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, '*.exr')))
-                        pngCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, '*.png')))
-                        jpgCount = len(glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, '*.jpg')))
+def manipulateForPaper(root):
+    for gender in next(os.walk(root))[1]:
+        for id in next(os.walk(os.path.join(root, gender)))[1]:
+            # idPath = os.path.join(root, gender, id)
+            for bckgnd in next(os.walk(os.path.join(root, gender, id)))[1]:
+                if bckgnd == 'Textured':
+                    path = os.path.join(root, gender, id, 'Textured')
+                    print(path, ' : ', os.path.exists(path))
 
-                        # pngFiles = glob.glob(os.path.join(root, gender, id, bckgnd, exp, hdmvmt, 'depth*.png'))
-                        #
-                        # for f in pngFiles:
-                        #     os.remove(f)
-
-                        if not (txtCount == exrCount == jpgCount == pngCount):
-                            # if txtCount == 2 * jpgCount:
-                            #     headposeFiles = glob.glob(os.path.join(root, gender, id, bckgnd,
-                            #                                            exp, hdmvmt, 'headpose*.txt'))
-                            #
-                            #     for f in headposeFiles:
-                            #         os.remove(f)
-
-                            print(os.path.join(root, gender, id, bckgnd, exp, hdmvmt))
-                            print(txtCount, exrCount, jpgCount, pngCount)
+                    cmd = "rm -r " + path
+                    # print(cmd)
+                    p = subprocess.call(cmd, shell=True)
 
 
 # Headpose data check -
@@ -115,3 +131,7 @@ for gender in next(os.walk(root))[1]:
 # 'RealBackground' : 268567
 # total : 367142
 # 138 GB in fastssd
+
+if __name__ == '__main__':
+    root = '/home/shubhajit/SynData/FaceDepth'
+    manipulateForPaper(root)

@@ -36,20 +36,32 @@ subprocess.call([python_exe, "-m", "pip", "install", "sympy"])
 
 ```
 
-## Dataset
-We have released the dataset for the 3D models - 
+[//]: # (## Dataset)
 
-https://ieee-dataport.org/documents/c3i-synthetic-human-dataset
+[//]: # (We have released the dataset for the 3D models - )
 
-## Citation
-If you find our work useful to your research, please consider citing:
-```
-@data{f6zx-bf29-22,
-doi = {10.21227/f6zx-bf29},
-url = {https://dx.doi.org/10.21227/f6zx-bf29},
-author = {Basak, Shubhajit and Khan, Faisal and Javidnia, Hossein and McDonnell, Rachel and Schukat, Michael and Corcoran, Peter},
-publisher = {IEEE Dataport},
-title = {C3I SYNTHETIC HUMAN DATASET},
-year = {2022} }
+[//]: # ()
+[//]: # (https://ieee-dataport.org/documents/c3i-synthetic-human-dataset)
 
-```
+[//]: # (## Citation)
+
+[//]: # (If you find our work useful to your research, please consider citing:)
+
+[//]: # (```)
+
+[//]: # (@data{f6zx-bf29-22,)
+
+[//]: # (doi = {10.21227/f6zx-bf29},)
+
+[//]: # (url = {https://dx.doi.org/10.21227/f6zx-bf29},)
+
+[//]: # (author = {Basak, Shubhajit and Khan, Faisal and Javidnia, Hossein and McDonnell, Rachel and Schukat, Michael and Corcoran, Peter},)
+
+[//]: # (publisher = {IEEE Dataport},)
+
+[//]: # (title = {C3I SYNTHETIC HUMAN DATASET},)
+
+[//]: # (year = {2022} })
+
+[//]: # ()
+[//]: # (```)

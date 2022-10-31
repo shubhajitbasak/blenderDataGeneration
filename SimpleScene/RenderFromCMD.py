@@ -5,7 +5,7 @@ import importlib
 import config
 
 
-renderScript = r'\captureWithGaze.py'  #
+renderScript = r'\captureWithGaze.py'
 importfbxScript = r'\importFbx.py'
 simpleScnScript = r'\sceneSetup_V1.py'
 compositorScript = r'\compositorSetup.py'
@@ -87,7 +87,7 @@ for root, dirs, files in os.walk(target_folder):
 for root, dirs, files in os.walk(target_folder):
     for dir in dirs:
         for file in os.listdir(str(root) + '/' + str(dir)):
-            if file.endswith(".blend"):
+            if file.endswith(".blend") & file.startswith('male'):
                 if 'male/0001/Simple/Neutral' in os.path.join(root, dir):
                     blenderFilePath = os.path.join(root, dir, file)
                     cmd = blenderPath + " --background " \
