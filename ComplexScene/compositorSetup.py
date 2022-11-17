@@ -7,11 +7,9 @@ tree = bpy.context.scene.node_tree
 for node in tree.nodes:
     tree.nodes.remove(node)
 
-basePath = '/mnt/fastssd/Shubhajit_Stuff/SynData/data/'
+basePath = '../data/Data'
 filepath = basePath + '/'.join(bpy.data.filepath.split('/')[-5:-1])
-filepath = filepath.replace('Simple','Complex/Barbershop')
-
-# print(filepath)
+filepath = filepath.replace('Simple', 'Complex/Barbershop')
 
 # create Render Layer node
 renderLayer_node = tree.nodes.new('CompositorNodeRLayers')

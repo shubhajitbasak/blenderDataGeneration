@@ -121,18 +121,17 @@ bpy.context.scene.unit_settings.length_unit = 'METERS'
 
 bpy.context.scene.view_layers[0].cycles.use_denoising = True
 
-basePath = '/mnt/fastssd/Shubhajit_Stuff/SynData/data/'
+basePath = '../data/Data/'
 
 dataPath = basePath + '/'.join(bpy.data.filepath.split('/')[-5:-1])
-dataPath = dataPath.replace('Simple','Complex/Barbershop')
+dataPath = dataPath.replace('Simple', 'Complex/Barbershop')
 
 bpy.ops.object.mode_set(mode='OBJECT')
 bpy.ops.object.select_all(action='DESELECT')
 
-# bpy.data.objects["Point"].hide_render = False
 bpy.context.scene.render.tile_x = 64
 bpy.context.scene.render.tile_y = 64
-bpy.context.scene.cycles.aa_samples = 1
+bpy.context.scene.cycles.aa_samples = 64
 
 bpy.context.scene.cycles.seed = 0
 
@@ -145,8 +144,6 @@ empty = bpy.data.objects['empty']
 empty_init_loc = tuple(map(round, empty.matrix_world.translation, repeat(4)))
 camera_init_loc = tuple(camera.location)
 camera_init_rotation = tuple(camera.rotation_euler)
-
-# material = bpy.data.materials['MaterialPlane001']
 
 print("****************** Starting *********************** \n ")
 print("\n Path : " + dataPath)
@@ -166,8 +163,6 @@ if True:
 
     for i in range(0, 1):
         bpy.context.scene.frame_set(i)
-        # material.diffuse_color = get_random_color()
-        # bpy.context.view_layer.update()
 
         bpy.data.scenes["Scene"].render.filepath = dataPathHeadRot + f'/depth_{i:04d}.png'
         textFilePath = dataPathHeadRot + f'/data_{i:04d}.txt'
@@ -186,8 +181,6 @@ if True:
             f.write('Head Point Location: ' + str(empty_init_loc) + '\n')
             f.write('Camera Rotation: ' + 'Yaw %.2f Pitch %.2f Roll %.2f' % (r_camera[2], r_camera[0], r_camera[1]) + '\n')
             f.write('Head Rotation: ' + 'Yaw %.2f Pitch %.2f Roll %.2f' % (r_empty[2], r_empty[0], r_empty[1]) + '\n')
-
-        # f.close()
 
 # --------- Region Camera Translation ------------- #
 
@@ -228,15 +221,12 @@ if True:
             f.write('Camera Rotation: ' + 'Yaw %.2f Pitch %.2f Roll %.2f' % (r_camera[2], r_camera[0], r_camera[1]) + '\n')
             f.write('Head Rotation: ' + 'Yaw %.2f Pitch %.2f Roll %.2f' % (r_empty[2], r_empty[0], r_empty[1]) + '\n')
 
-        # f.close()
 
         camera.location = camera_init_loc
         camera.rotation_euler = camera_init_rotation
 
         camera.location.x = camera.location.x + random.uniform(0.001, 0.140)
         camera.location.z = camera.location.z + random.uniform(0.001, 0.04)
-
-        # point_at(camera, empty_loc, roll=radians(0))
 
 
     bpy.context.scene.frame_set(0)
@@ -267,7 +257,6 @@ if True:
             f.write('Camera Rotation: ' + 'Yaw %.2f Pitch %.2f Roll %.2f' % (r_camera[2], r_camera[0], r_camera[1]) + '\n')
             f.write('Head Rotation: ' + 'Yaw %.2f Pitch %.2f Roll %.2f' % (r_empty[2], r_empty[0], r_empty[1]) + '\n')
 
-        # f.close()
 
         camera.location = camera_init_loc
         camera.rotation_euler = camera_init_rotation
@@ -275,7 +264,6 @@ if True:
         camera.location.x = camera.location.x - random.uniform(0.001, 0.140)
         camera.location.z = camera.location.z - random.uniform(0.001, 0.04)
 
-        # point_at(camera, empty_loc, roll=radians(0))
 
 # --------- Region Camera Rotation & Translation Head Rotation ------------- #
 
@@ -286,8 +274,6 @@ if True:
 
     bpy.context.scene.frame_set(0)
     bpy.context.view_layer.update()
-
-    # empty_loc = tuple(empty.location)
 
     dataPathHeadCamRotTran = dataPath + '/HeadCameraRotTran'
 
@@ -313,7 +299,6 @@ if True:
             frame = frame - 70
 
         bpy.context.scene.frame_set(frame)
-        # material.diffuse_color = get_random_color()
         bpy.context.view_layer.update()
 
         bpy.data.scenes["Scene"].node_tree.nodes["File Output"].file_slots[0].path = f'image{i:04d}'
@@ -337,14 +322,9 @@ if True:
             f.write('Camera Rotation: ' + 'Yaw %.2f Pitch %.2f Roll %.2f' % (r_camera[2], r_camera[0], r_camera[1]) + '\n')
             f.write('Head Rotation: ' + 'Yaw %.2f Pitch %.2f Roll %.2f' % (r_empty[2], r_empty[0], r_empty[1]) + '\n')
 
-        # f.close()
-
         camera.location = tuple(map(float, tuple(pt)))
-        # camera.rotation_euler = camera_init_rotation
-
-        # camera.location.x = camera.location.x + random.uniform(0.001,0.140)
-        # camera.location.z = camera.location.z + random.uniform(0.001,0.04)
 
         point_at(camera, empty_init_loc, roll=radians(0))
 
-print("\n\n Completed \n\n ############################################# ******************************************* ######################################## \n\n")
+print("\n\n Completed \n\n ############################################# ******************************************* "
+      "######################################## \n\n")

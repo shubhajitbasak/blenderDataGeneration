@@ -132,6 +132,31 @@ def manipulateForPaper(root):
 # total : 367142
 # 138 GB in fastssd
 
+
+def get_file_count_DIB(root):
+    exrtotal=0
+    jpgtotal=0
+    txttotal=0
+    folders = [x[0] for x in os.walk(root)]
+    pos = ['HeadRot', 'HeadCameraRotTran', 'CameraTran']
+    for folder in folders:
+        if any(element in folder for element in pos):
+            txtCount = len(glob.glob(os.path.join(folder, '*.txt')))
+            jpgCount = len(glob.glob(os.path.join(folder, '*.jpg')))
+            exrcount = len(glob.glob(os.path.join(folder, '*.exr')))
+            exrtotal += exrcount
+            jpgtotal += jpgCount
+            txttotal += txtCount
+
+            print(folder, ':', txtCount, exrcount, jpgCount)
+
+    print('exr: ', exrtotal, ' jpg: ', jpgtotal, ' txt: ', txttotal)
+
+# total exr:  37670  jpg:  37670  txt:  37670
+# exr:  6650  jpg:  6650  txt:  6650
+# exr:  6860  jpg:  6860  txt:  6860
+
+
 if __name__ == '__main__':
-    root = '/home/shubhajit/SynData/FaceDepth'
-    manipulateForPaper(root)
+    root = '/mnt/fastssd/synData/FaceDepthSynth/For_Paper/female_data_part1'
+    get_file_count_DIB(root)
