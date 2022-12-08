@@ -121,7 +121,7 @@ bpy.context.scene.unit_settings.length_unit = 'METERS'
 
 bpy.context.scene.view_layers[0].cycles.use_denoising = True
 
-basePath = '../data/Data/'
+basePath = '/mnt/sata/code/blenderDataGenerationFinal/data/Data/'
 
 dataPath = basePath + '/'.join(bpy.data.filepath.split('/')[-5:-1])
 dataPath = dataPath.replace('Simple', 'Complex/Barbershop')
@@ -129,9 +129,10 @@ dataPath = dataPath.replace('Simple', 'Complex/Barbershop')
 bpy.ops.object.mode_set(mode='OBJECT')
 bpy.ops.object.select_all(action='DESELECT')
 
+# bpy.data.objects["Point"].hide_render = False
 bpy.context.scene.render.tile_x = 64
 bpy.context.scene.render.tile_y = 64
-bpy.context.scene.cycles.aa_samples = 64
+bpy.context.scene.cycles.aa_samples = 1
 
 bpy.context.scene.cycles.seed = 0
 
@@ -275,6 +276,8 @@ if True:
     bpy.context.scene.frame_set(0)
     bpy.context.view_layer.update()
 
+    # empty_loc = tuple(empty.location)
+
     dataPathHeadCamRotTran = dataPath + '/HeadCameraRotTran'
 
     if not os.path.exists(dataPathHeadCamRotTran):
@@ -299,6 +302,7 @@ if True:
             frame = frame - 70
 
         bpy.context.scene.frame_set(frame)
+        # material.diffuse_color = get_random_color()
         bpy.context.view_layer.update()
 
         bpy.data.scenes["Scene"].node_tree.nodes["File Output"].file_slots[0].path = f'image{i:04d}'

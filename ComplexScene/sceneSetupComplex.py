@@ -108,29 +108,29 @@ bpy.context.scene.unit_settings.system = 'METRIC'
 
 bpy.context.scene.unit_settings.length_unit = 'METERS'
 
-# # -------  setup scene render parameters -------- #
-# bpy.context.scene.render.engine = 'CYCLES'
-# bpy.context.scene.cycles.device = 'GPU'
-# bpy.context.scene.cycles.progressive = 'BRANCHED_PATH'
-# bpy.context.scene.cycles.aa_samples = 64
-# bpy.context.scene.cycles.min_transparent_bounces = 32
-# bpy.context.scene.cycles.light_sampling_threshold = 0
-#
-# bpy.context.scene.cycles.sample_clamp_indirect = 0
-#
-# bpy.context.scene.cycles.transparent_max_bounces = 32
-# bpy.context.scene.cycles.transmission_bounces = 32
-# bpy.context.scene.cycles.sample_clamp_indirect = 0
-#
-# bpy.context.scene.cycles.max_bounces = 32
-# bpy.context.scene.cycles.diffuse_bounces = 0
-# bpy.context.scene.cycles.glossy_bounces = 0
-# bpy.context.scene.cycles.transparent_max_bounces = 16
-# bpy.context.scene.cycles.transmission_bounces = 16
-#
-# # ------- setup screen resolution ------- #
-# bpy.context.scene.render.resolution_x = final_image_resolution_x
-# bpy.context.scene.render.resolution_y = final_image_resolution_y
+# -------  setup scene render parameters -------- #
+bpy.context.scene.render.engine = 'CYCLES'
+bpy.context.scene.cycles.device = 'GPU'
+bpy.context.scene.cycles.progressive = 'BRANCHED_PATH'
+bpy.context.scene.cycles.aa_samples = 64
+bpy.context.scene.cycles.min_transparent_bounces = 32
+bpy.context.scene.cycles.light_sampling_threshold = 0
+
+bpy.context.scene.cycles.sample_clamp_indirect = 0
+
+bpy.context.scene.cycles.transparent_max_bounces = 32
+bpy.context.scene.cycles.transmission_bounces = 32
+bpy.context.scene.cycles.sample_clamp_indirect = 0
+
+bpy.context.scene.cycles.max_bounces = 32
+bpy.context.scene.cycles.diffuse_bounces = 0
+bpy.context.scene.cycles.glossy_bounces = 0
+bpy.context.scene.cycles.transparent_max_bounces = 16
+bpy.context.scene.cycles.transmission_bounces = 16
+
+# ------- setup screen resolution ------- #
+bpy.context.scene.render.resolution_x = final_image_resolution_x
+bpy.context.scene.render.resolution_y = final_image_resolution_y
 
 
 _objects = bpy.context.scene.objects
@@ -221,6 +221,7 @@ for ob in context.selected_objects:
     ob.animation_data_clear()
 
 arma = bpy.data.objects['Armature']
+# bpy.context.scene.objects.active = ob
 bpy.context.view_layer.objects.active = arma
 bpy.ops.object.mode_set(mode='POSE')
 

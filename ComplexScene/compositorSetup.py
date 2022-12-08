@@ -7,9 +7,11 @@ tree = bpy.context.scene.node_tree
 for node in tree.nodes:
     tree.nodes.remove(node)
 
-basePath = '../data/Data'
+basePath = '/mnt/sata/code/blenderDataGenerationFinal/data/Data/'
 filepath = basePath + '/'.join(bpy.data.filepath.split('/')[-5:-1])
-filepath = filepath.replace('Simple', 'Complex/Barbershop')
+filepath = filepath.replace('Simple','Complex/Barbershop')
+
+# print(filepath)
 
 # create Render Layer node
 renderLayer_node = tree.nodes.new('CompositorNodeRLayers')

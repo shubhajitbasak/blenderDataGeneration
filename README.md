@@ -9,6 +9,10 @@
 * Data Preparation Script
 * Neck Bone Adjustment through Iterative Script
 
+* Blender Scenes can be downloaded from - 
+https://drive.google.com/file/d/18UF2DQpHQ5N7L9Z-LCcD4P_elj_-LDco/view?usp=sharing
+
+
 ## Install package within Blender Python
 
 * Open Blender python editor

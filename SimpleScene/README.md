@@ -3,8 +3,6 @@
 *  For Simple background generation - 
 
    - Update the paths in config.py
-   - the simple scene blender file can be downloaded from - 
-   https://drive.google.com/file/d/1aQtiIs2b5U-AFTw-VjUzKp8cpXwwlIHh/view?usp=sharing
    - Update the basePath in captureWithGaze.py
    - Update the basePath in compositorSetup.py
    - For textured background we have used the texture from BRODATZ TEXTURE DATABASE-
