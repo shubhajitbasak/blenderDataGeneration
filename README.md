@@ -42,9 +42,9 @@ subprocess.call([python_exe, "-m", "pip", "install", "sympy"])
 
 The raw dataset can be found in the following path - 
 
-[//]:  # 3D full body model -
+[//]:  # ( 3D full body model - )
 
-[//]:  # https://drive.google.com/drive/folders/177Xem5rLg7GYRn6IDwWMwZtBgr57OrtB?usp=share_link
+[//]:  # ( https://drive.google.com/drive/folders/177Xem5rLg7GYRn6IDwWMwZtBgr57OrtB?usp=share_link )
 
 Head Pose dataset - 
 
