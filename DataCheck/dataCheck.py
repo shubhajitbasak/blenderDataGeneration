@@ -158,5 +158,5 @@ def get_file_count_DIB(root):
 
 
 if __name__ == '__main__':
-    root = '/mnt/fastssd/synData/FaceDepthSynth/For_Paper/female_data_part1'
+    root = '/mnt/fastssd/synData/FaceDepthSynth/orig'
     get_file_count_DIB(root)
