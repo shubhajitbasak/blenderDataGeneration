@@ -1,4 +1,8 @@
 # Blender Data Generation
+
+This is the official repository for the paper : [C3I-SynFace: A synthetic head pose and facial 
+depth dataset using seed virtual human models.](https://doi.org/10.1016/j.dib.2023.109087) 
+
 * Import FBX from iClone
 * Import Missing Files in Blender
 * Scene Setup in Blender
@@ -11,6 +15,10 @@
 
 * Blender Scenes can be downloaded from - 
 https://drive.google.com/file/d/18UF2DQpHQ5N7L9Z-LCcD4P_elj_-LDco/view?usp=sharing
+
+![blenderSetup.png](Assets%2FblenderSetup.png)
+
+![samples.png](Assets%2Fsamples.png)
 
 
 ## Install package within Blender Python
@@ -40,11 +48,13 @@ subprocess.call([python_exe, "-m", "pip", "install", "sympy"])
 
 ```
 
-The raw dataset can be found in the following path - 
+## Dataset
 
-[//]:  # ( 3D full body model - )
+The raw dataset can be found in the following path (alternate to Mendeley) - 
 
-[//]:  # ( https://drive.google.com/drive/folders/177Xem5rLg7GYRn6IDwWMwZtBgr57OrtB?usp=share_link )
+3D full body model -
+
+ https://drive.google.com/drive/folders/177Xem5rLg7GYRn6IDwWMwZtBgr57OrtB?usp=share_link
 
 Head Pose dataset - 
 
@@ -55,32 +65,20 @@ Face depth Dataset -
 https://drive.google.com/drive/folders/1oleqLbR793xBmw8gF91JTi4TrBJQUMr2?usp=share_link
 
 
-[//]: # (## Dataset)
+## Citation
 
-[//]: # (We have released the dataset for the 3D models - )
+If you find our work useful to your research, please consider citing:
 
-[//]: # ()
-[//]: # (https://ieee-dataport.org/documents/c3i-synthetic-human-dataset)
+```
 
-[//]: # (## Citation)
+@article{basak2023c3i,
+  title={C3I-SynFace: A synthetic head pose and facial depth dataset using seed virtual human models.},
+  author={Basak, Shubhajit and Khan, Faisal and Javidnia, Hossein and Corcoran, Peter and McDonnell, Rachel and Schukat, Michael},
+  journal={Data in Brief},
+  pages={109087},
+  year={2023},
+  publisher={Elsevier}
+}
 
-[//]: # (If you find our work useful to your research, please consider citing:)
 
-[//]: # (```)
-
-[//]: # (@data{f6zx-bf29-22,)
-
-[//]: # (doi = {10.21227/f6zx-bf29},)
-
-[//]: # (url = {https://dx.doi.org/10.21227/f6zx-bf29},)
-
-[//]: # (author = {Basak, Shubhajit and Khan, Faisal and Javidnia, Hossein and McDonnell, Rachel and Schukat, Michael and Corcoran, Peter},)
-
-[//]: # (publisher = {IEEE Dataport},)
-
-[//]: # (title = {C3I SYNTHETIC HUMAN DATASET},)
-
-[//]: # (year = {2022} })
-
-[//]: # ()
-[//]: # (```)
+```
